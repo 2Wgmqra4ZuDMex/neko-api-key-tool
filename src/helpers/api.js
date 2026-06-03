@@ -1,8 +1,9 @@
 import { showError } from './utils';
+import { getRuntimeConfig } from './runtime-config';
 import axios from 'axios';
 
 export const API = axios.create({
-  baseURL: process.env.REACT_APP_SERVER ? process.env.REACT_APP_SERVER : '',
+  baseURL: getRuntimeConfig('REACT_APP_SERVER', process.env.REACT_APP_SERVER || ''),
 });
 
 API.interceptors.response.use(

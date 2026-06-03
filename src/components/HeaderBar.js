@@ -6,10 +6,12 @@ import {
   IconSun,
 } from '@douyinfe/semi-icons';
 import { useSetTheme, useTheme } from '../context/Theme';
+import { getRuntimeConfigBool } from '../helpers';
 
 const HeaderBar = () => {
   const theme = useTheme();
   const setTheme = useSetTheme();
+  const showIconGithub = getRuntimeConfigBool('REACT_APP_SHOW_ICONGITHUB', true);
 
   return (
     <div
@@ -47,7 +49,7 @@ const HeaderBar = () => {
                 onClick={() => setTheme(true)}
               />
             )}
-            {process.env.REACT_APP_SHOW_ICONGITHUB === "true" && (
+            {showIconGithub && (
               <IconGithubLogo
                 size="large"
                 style={{ cursor: 'pointer', marginRight: '10px', color: 'var(--semi-color-text-2)' }}

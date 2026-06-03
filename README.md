@@ -46,28 +46,38 @@ REACT_APP_SHOW_ICONGITHUB=true
 4. （可选）[绑定自定义域名](https://vercel.com/docs/concepts/projects/domains/add-a-domain)：Vercel 分配的域名 DNS 在某些区域被污染了，绑定自定义域名即可直连。
 
 #### Docker 部署
-1. 克隆项目到本地:
+1. 准备环境变量文件:
 ```bash
-git clone https://github.com/Calcium-Ion/neko-api-key-tool.git
-cd neko-api-key-tool
-```
-
-2. 创建并配置环境变量文件:
-```bash
-# 复制.env.example文件为.env
 cp .env.example .env
-# 根据自己需求配置env文件中的环境变量
 vim .env
 ```
 
-3. 构建并运行 Docker 容器:
-```bash
-# 构建镜像
-docker build -t neko-api-key-tool .
+2. 使用 Docker Compose 运行:
+```yaml
+version: '3.8'
 
-# 运行容器
-docker run -d -p 80:80 --name neko-api-key-tool neko-api-key-tool
+services:
+  neko-api-key-tool:
+    image: prewar5410/neko-api-key-tool:latest
+    container_name: neko-api-key-tool
+    ports:
+      - "80:80"
+    env_file:
+      - .env
+    restart: unless-stopped
 ```
+
+3. 启动容器:
+```bash
+docker compose up -d
+```
+
+也可以直接使用 docker run：
+```bash
+docker run -d -p 80:80 --name neko-api-key-tool --env-file .env prewar5410/neko-api-key-tool:latest
+```
+
+Docker 镜像启动时会读取容器环境变量并生成运行时配置，因此同一个镜像可以在不同环境中通过 `.env` 配置不同的 NewAPI 地址和显示选项。
 
 ### 二次开发
 复制.env.example文件为.env，根据自己需求配置env文件中的环境变量。

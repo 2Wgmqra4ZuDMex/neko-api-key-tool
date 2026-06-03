@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Button, Input, Typography, Table, Tag, Spin, Card, Collapse, Toast, Space, Tabs } from '@douyinfe/semi-ui';
 import { IconSearch, IconCopy, IconDownload } from '@douyinfe/semi-icons';
-import { API, timestamp2string } from '../helpers';
+import { API, getRuntimeBaseUrls, getRuntimeConfigBool, timestamp2string } from '../helpers';
 import { stringToColor } from '../helpers/render';
 import { ITEMS_PER_PAGE } from '../constants';
 import { renderModelPrice, renderQuota } from '../helpers/render';
@@ -49,7 +49,9 @@ const LogsTable = () => {
     const requestIdRef = useRef(0);
     const lastSubmitAtRef = useRef(0);
     const lastToastAtRef = useRef(0);
-    const baseUrls = JSON.parse(process.env.REACT_APP_BASE_URL);  // 解析环境变量
+    const showBalance = getRuntimeConfigBool('REACT_APP_SHOW_BALANCE', true);
+    const showDetail = getRuntimeConfigBool('REACT_APP_SHOW_DETAIL', true);
+    const baseUrls = useMemo(() => getRuntimeBaseUrls(), []);
 
     useEffect(() => {
         const firstKey = Object.keys(baseUrls)[0];
@@ -116,7 +118,7 @@ const LogsTable = () => {
         try {
             let hasValidData = false;
 
-            if (process.env.REACT_APP_SHOW_BALANCE === "true") {
+            if (showBalance) {
                 try {
                     const usageRes = await API.get(`${currentBaseUrl}/api/usage/token/?_t=${requestTime}`, requestConfig);
                     const usageData = usageRes.data;
@@ -138,7 +140,7 @@ const LogsTable = () => {
                 }
             }
 
-            if (process.env.REACT_APP_SHOW_DETAIL === "true") {
+            if (showDetail) {
                 try {
                     const logRes = await API.get(`${currentBaseUrl}/api/log/token?_t=${requestTime}`, requestConfig);
                     const { success, data: logData } = logRes.data;
@@ -440,7 +442,7 @@ const LogsTable = () => {
             </Card>
             <Card style={{ marginTop: 24 }}>
                 <Collapse activeKey={activeKeys} onChange={(keys) => setActiveKeys(keys)}>
-                    {process.env.REACT_APP_SHOW_BALANCE === "true" && (
+                    {showBalance && (
                         <Panel
                             header="令牌信息"
                             itemKey="1"
@@ -475,7 +477,7 @@ const LogsTable = () => {
                             </Spin>
                         </Panel>
                     )}
-                    {process.env.REACT_APP_SHOW_DETAIL === "true" && (
+                    {showDetail && (
                         <Panel
                             header="调用详情"
                             itemKey="2"

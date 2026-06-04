@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: prewar5410/neko-api-key-tool
+  IMAGE_NAME: pushchair7463/neko-api-key-tool
 
 jobs:
   docker:

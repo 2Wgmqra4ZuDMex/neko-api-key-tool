@@ -18,10 +18,12 @@ cat > "$CONFIG_FILE" <<'EOF'
 window.RUNTIME_CONFIG = {
 EOF
 
+DEFAULT_BASE_URL='{"server1": "https://api.server1.com"}'
+
 write_config_value REACT_APP_SERVER "${REACT_APP_SERVER:-}"
 write_config_value REACT_APP_SHOW_DETAIL "${REACT_APP_SHOW_DETAIL:-true}"
 write_config_value REACT_APP_SHOW_BALANCE "${REACT_APP_SHOW_BALANCE:-true}"
-write_config_value REACT_APP_BASE_URL "${REACT_APP_BASE_URL:-{\"server1\": \"https://api.server1.com\"}}"
+write_config_value REACT_APP_BASE_URL "${REACT_APP_BASE_URL:-$DEFAULT_BASE_URL}"
 write_config_value REACT_APP_SHOW_ICONGITHUB "${REACT_APP_SHOW_ICONGITHUB:-true}"
 
 cat >> "$CONFIG_FILE" <<'EOF'
